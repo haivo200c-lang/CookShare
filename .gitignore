@@ -1,0 +1,13 @@
+.vs/
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+ProjectEvaluation/
+
+*.user
+*.suo
+*.rsuser
+.vscode/
+
+*.log
