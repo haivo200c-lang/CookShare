@@ -1,10 +1,9 @@
 @model int
 
-<a class="notification-nav-link@(Model > 0 ? " has-unread" : "")"
+<a class="notification-nav-link"
    asp-controller="Notifications"
    asp-action="Index"
    aria-label="Thông báo@(Model > 0 ? $", {Model} chưa đọc" : string.Empty)">
-    <svg class="icon notification-bell" aria-hidden="true"><use href="#i-bell" /></svg>
     <span>Thông báo</span>
     @if (Model > 0)
     {

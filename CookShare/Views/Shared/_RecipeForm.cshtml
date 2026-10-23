@@ -1,3 +1,4 @@
+
 @model CookShare.ViewModels.RecipeFormViewModel
 
 @{
@@ -5,176 +6,243 @@
     var actionName = editing ? "Edit" : "Create";
 }
 
-<div class="recipe-page-wrapper">
+<div class="recipe-page-wrapper cs108">
     <div class="container recipe-form-wrapper">
 
-        <nav class="recipe-breadcrumb" aria-label="Đường dẫn">
+        <nav class="recipe-breadcrumb"
+             aria-label="Đường dẫn">
             <a asp-controller="Home" asp-action="Index">Trang chủ</a>
             <span>/</span>
             <a asp-controller="Recipe" asp-action="Index">Công thức</a>
             <span>/</span>
-            <span aria-current="page">@(editing ? "Chỉnh sửa" : "Chia sẻ")</span>
+            <span aria-current="page">
+                @(editing ? "Chỉnh sửa" : "Chia sẻ công thức")
+            </span>
         </nav>
 
-        <header class="page-intro recipe-studio-intro">
-            <div>
-                <p class="studio-kicker">Sổ tay công thức</p>
-                <h1>@(editing ? "Chỉnh sửa công thức" : "Chia sẻ công thức")</h1>
-                <p>Điền từng phần bên dưới. Ảnh dùng đường dẫn có sẵn, không tải tệp lên máy chủ.</p>
-            </div>
+        <header class="cs108-form-hero">
+            <span class="eyebrow">
+                <svg class="icon" aria-hidden="true">
+                    <use href="#i-spark" />
+                </svg>
+                COOKSHARE CREATOR STUDIO
+            </span>
+
+            <h1>
+                @(editing ? "Hoàn thiện công thức"
+                           : "Chia sẻ món ngon")
+                <em> của bạn.</em>
+            </h1>
+
+            <p>
+                Mỗi món ăn đều có một câu chuyện.
+                Hãy cùng chia sẻ hương vị của bạn
+                với cộng đồng yêu bếp.
+            </p>
         </header>
 
         <form asp-controller="Recipe"
               asp-action="@actionName"
               asp-route-id="@(editing ? ViewBag.RecipeId : null)"
               method="post"
-              class="auth-form recipe-studio-form">
+              class="cs108-recipe-form">
 
             @Html.AntiForgeryToken()
 
             <div asp-validation-summary="All"
-                 class="text-danger"
+                 class="cs108-validation-summary"
                  role="alert"></div>
 
             <div class="recipe-form-grid">
+
                 <div class="recipe-form-col">
-                    <section class="recipe-form-card" aria-labelledby="recipeInfoHeading">
-                        <div class="form-section-heading">
-                            <span>01</span>
+
+                    <section class="recipe-form-card">
+                        <div class="cs108-section-heading">
+                            <span class="cs108-step-number">01</span>
                             <div>
-                                <h2 id="recipeInfoHeading">Thông tin món ăn</h2>
-                                <p>Tên, danh mục và câu chuyện ngắn của món.</p>
+                                <h2>Thông tin món ăn</h2>
+                                <p>Giới thiệu món ngon của bạn.</p>
                             </div>
                         </div>
 
                         <div class="form-field-group">
                             <label asp-for="Name" class="form-label">
-                                Tên món ăn <span class="required-mark" aria-hidden="true">*</span>
+                                Tên món ăn <span class="cs108-required">*</span>
                             </label>
+
                             <input asp-for="Name"
                                    class="form-input"
+                                   maxlength="200"
                                    placeholder="Ví dụ: Phở bò Hà Nội" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger"></span>
                         </div>
 
                         <div class="form-field-group">
                             <label asp-for="Category" class="form-label">
-                                Danh mục <span class="required-mark" aria-hidden="true">*</span>
+                                Danh mục <span class="cs108-required">*</span>
                             </label>
+
                             <select asp-for="Category" class="form-select">
                                 <partial name="_CategoryOptions" />
                             </select>
-                            <span asp-validation-for="Category" class="text-danger"></span>
+
+                            <span asp-validation-for="Category"
+                                  class="text-danger"></span>
                         </div>
 
                         <div class="form-field-group">
                             <label asp-for="Description" class="form-label">
-                                Mô tả <span class="required-mark" aria-hidden="true">*</span>
+                                Mô tả món ăn <span class="cs108-required">*</span>
                             </label>
+
                             <textarea asp-for="Description"
                                       class="form-textarea"
                                       rows="5"
-                                      placeholder="Nguồn gốc, hương vị hoặc kỷ niệm gắn với món ăn"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
+                                      placeholder="Điều gì khiến món ăn này trở nên đặc biệt?"></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger"></span>
                         </div>
                     </section>
 
-                    <section class="recipe-form-card" aria-labelledby="recipeImageHeading">
-                        <div class="form-section-heading">
-                            <span>02</span>
+                    <section class="recipe-form-card">
+                        <div class="cs108-section-heading">
+                            <span class="cs108-step-number">02</span>
                             <div>
-                                <h2 id="recipeImageHeading">Hình ảnh</h2>
-                                <p>Dán một đường dẫn ảnh. Phần xem trước chỉ hiện trên trình duyệt.</p>
+                                <h2>Hình ảnh món ăn</h2>
+                                <p>Một bức ảnh đẹp khiến công thức hấp dẫn hơn.</p>
                             </div>
+                        </div>
+
+                        <div class="cs108-image-preview">
+                            <img id="cs108PreviewImage"
+                                 src="@(string.IsNullOrWhiteSpace(Model.Image)
+                                     ? Url.Content("~/img/recipe-placeholder.svg")
+                                     : Model.Image)"
+                                 data-fallback="@Url.Content("~/img/recipe-placeholder.svg")"
+                                 alt="Ảnh xem trước món ăn" />
                         </div>
 
                         <div class="form-field-group">
-                            <label asp-for="Image" class="form-label">Đường dẫn ảnh</label>
-                            <input asp-for="Image"
-                                   class="form-input"
-                                   inputmode="url"
-                                   placeholder="https://… hoặc /img/recipe-placeholder.svg"
-                                   aria-describedby="imageHint" />
-                            <p id="imageHint" class="form-hint">Không bắt buộc. Có thể dùng ảnh trong thư mục /img hoặc một liên kết công khai.</p>
-                            <span asp-validation-for="Image" class="text-danger"></span>
-                        </div>
+                            <label asp-for="Image" for="cs108ImageInput" class="form-label">
+                                Đường dẫn hình ảnh
+                            </label>
 
-                        <div class="image-preview-wrapper" id="recipeImagePreview" hidden>
-                            <img id="recipeImagePreviewImg" alt="Xem trước ảnh công thức" />
-                            <div class="image-preview-overlay">
-                                <span>Xem trước từ đường dẫn hiện có</span>
-                            </div>
+                            <input asp-for="Image"
+                                   id="cs108ImageInput"
+                                   class="form-input"
+                                   placeholder="https://example.com/mon-an.jpg" />
+
+                            <span asp-validation-for="Image"
+                                  class="text-danger"></span>
+
+                            <p class="cs108-field-help">
+                                Dán liên kết ảnh HTTPS hoặc đường dẫn ảnh nội bộ.
+                                Hình ảnh sẽ hiển thị phía trên.
+                            </p>
                         </div>
                     </section>
+
                 </div>
 
                 <div class="recipe-form-col">
-                    <section class="recipe-form-card" aria-labelledby="ingredientsHeading">
-                        <div class="form-section-heading">
-                            <span>03</span>
+
+                    <section class="recipe-form-card">
+                        <div class="cs108-section-heading">
+                            <span class="cs108-step-number">03</span>
                             <div>
-                                <h2 id="ingredientsHeading">Nguyên liệu</h2>
-                                <p>Mỗi dòng là một nguyên liệu.</p>
+                                <h2>Nguyên liệu</h2>
+                                <p>Những gì cần chuẩn bị trước khi vào bếp.</p>
                             </div>
                         </div>
 
                         <div class="form-field-group">
                             <label asp-for="Ingredients" class="form-label">
-                                Nguyên liệu <span class="required-mark" aria-hidden="true">*</span>
+                                Danh sách nguyên liệu
+                                <span class="cs108-required">*</span>
                             </label>
+
                             <textarea asp-for="Ingredients"
-                                      class="form-textarea"
-                                      rows="8"
-                                      placeholder="500 g thịt bò&#10;1 củ hành tây&#10;Gia vị"
-                                      aria-describedby="ingredientsHint"></textarea>
-                            <p id="ingredientsHint" class="form-hint">Trang chi tiết tách từng dòng thành danh sách có thể đánh dấu.</p>
-                            <span asp-validation-for="Ingredients" class="text-danger"></span>
+                                      class="form-textarea cs108-ingredients-input"
+                                      rows="9"
+                                      placeholder="500g thịt bò&#10;300g bánh phở&#10;2 củ hành tím&#10;Muối, đường, nước mắm"></textarea>
+
+                            <span asp-validation-for="Ingredients"
+                                  class="text-danger"></span>
+
+                            <p class="cs108-field-help">
+                                Nhập mỗi nguyên liệu trên một dòng.
+                            </p>
                         </div>
                     </section>
 
-                    <section class="recipe-form-card" aria-labelledby="instructionsHeading">
-                        <div class="form-section-heading">
-                            <span>04</span>
+                    <section class="recipe-form-card">
+                        <div class="cs108-section-heading">
+                            <span class="cs108-step-number">04</span>
                             <div>
-                                <h2 id="instructionsHeading">Các bước thực hiện</h2>
-                                <p>Mỗi dòng là một bước.</p>
+                                <h2>Các bước chế biến</h2>
+                                <p>Hướng dẫn người đọc nấu theo từng bước.</p>
                             </div>
                         </div>
 
                         <div class="form-field-group">
                             <label asp-for="Instructions" class="form-label">
-                                Hướng dẫn chế biến <span class="required-mark" aria-hidden="true">*</span>
+                                Hướng dẫn thực hiện
+                                <span class="cs108-required">*</span>
                             </label>
-                            <textarea asp-for="Instructions"
-                                      class="form-textarea"
-                                      rows="12"
-                                      placeholder="Sơ chế nguyên liệu&#10;Nấu nước dùng&#10;Trình bày và thưởng thức"
-                                      aria-describedby="instructionsHint"></textarea>
-                            <p id="instructionsHint" class="form-hint">Giữ mỗi bước trên một dòng để trang chi tiết xếp thành dòng thời gian.</p>
-                            <span asp-validation-for="Instructions" class="text-danger"></span>
-                        </div>
 
-                        <aside class="kitchen-tip">
-                            <svg class="icon" aria-hidden="true"><use href="#i-leaf" /></svg>
-                            <div>
-                                <strong>Mẹo trình bày</strong>
-                                <p>Viết ngắn, theo thứ tự nấu. Người đọc có thể đánh dấu nguyên liệu khi đã chuẩn bị xong.</p>
-                            </div>
-                        </aside>
+                            <textarea asp-for="Instructions"
+                                      class="form-textarea cs108-instructions-input"
+                                      rows="12"
+                                      placeholder="Bước 1: Chuẩn bị nguyên liệu&#10;Bước 2: Sơ chế&#10;Bước 3: Chế biến món ăn"></textarea>
+
+                            <span asp-validation-for="Instructions"
+                                  class="text-danger"></span>
+
+                            <p class="cs108-field-help">
+                                Viết mỗi bước trên một dòng để công thức
+                                dễ theo dõi hơn.
+                            </p>
+                        </div>
                     </section>
+
+                    <aside class="cs108-kitchen-tip">
+                        <svg class="icon" aria-hidden="true">
+                            <use href="#i-leaf" />
+                        </svg>
+                        <div>
+                            <strong>Mẹo nhỏ từ CookShare</strong>
+                            <p>
+                                Hãy đặt tên món ăn rõ ràng, sử dụng ảnh đẹp
+                                và mô tả từng bước thật dễ hiểu.
+                            </p>
+                        </div>
+                    </aside>
+
                 </div>
             </div>
 
-            <p class="required-note form-hint"><span class="required-mark" aria-hidden="true">*</span> Trường bắt buộc</p>
+            <footer class="recipe-form-actions cs108-form-actions">
+                <span class="cs108-save-hint">
+                    Những trường có dấu * là bắt buộc.
+                </span>
 
-            <div class="recipe-form-actions">
-                <a asp-controller="Recipe" asp-action="Index" class="btn btn-secondary">Hủy</a>
-                <button type="submit" class="btn" data-submit>
+                <a asp-controller="Recipe"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Hủy
+                </a>
+
+                <button type="submit" class="btn">
+                    <svg class="icon" aria-hidden="true">
+                        <use href="#i-check" />
+                    </svg>
                     @(editing ? "Lưu thay đổi" : "Đăng công thức")
                 </button>
-            </div>
+            </footer>
         </form>
     </div>
 </div>
-
-<script src="~/js/recipe-form.js" asp-append-version="true"></script>
